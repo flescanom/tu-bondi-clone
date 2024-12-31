@@ -50,10 +50,6 @@ const Map = () => {
       />
       
       </MapView>
-      <TouchableOpacity
-        style={styles.button} onPress={() => alert('La zona centrica se encuentra afectada por manifestaciones, tu bondi puede desviarse o sufrir demoras')}>
-            <Text>Aca</Text>
-        </TouchableOpacity>
     </>
   );
 };
@@ -63,6 +59,6 @@ export default Map;
 const styles = StyleSheet.create({
   map: {
     width: "100%",
-    height: "90%",
+    height: "100%",
   },
 });
