@@ -7,7 +7,7 @@ const SplashScreen = () => {
     <View>
       <View>
         <Image
-          source={require("../../assets/cbaciudad.jpg")}
+          source={require("../../assets/images/cbaciudad.jpg")}
           style={styles.image}
         />
         <Text style={styles.text}>Cargando... </Text>

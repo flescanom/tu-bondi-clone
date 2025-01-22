@@ -1,58 +1,46 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-  FlatList,
-  useWindowDimensions,
-} from "react-native";
+import { StyleSheet, View, FlatList, useWindowDimensions } from "react-native";
 import Map from "../components/Map";
 import BusList from "../components/BusList";
 import { busLines } from "../data/lines";
+import { useState } from "react";
+import ButtonPlace from "../components/ButtonPlace";
 
 const HomeScreen = () => {
-
   const { width } = useWindowDimensions();
+
+  const [showButtons, setShowButtons] = useState(false);
+  const [busSelected, setBusSelected] = useState(null);
+  const [points, setPoints] = useState(null);
+
+  const showButtonsPlace = (isShowButtons, itemBus) => {
+    setShowButtons(isShowButtons);
+    setBusSelected(itemBus);
+  };
+
+  const drawPoints = () => {
+    setPoints(busSelected.stops)
+    console.log('Puntos: ', points);
+  }
 
   return (
     <View style={styles.container}>
-      <Map />
+      <Map points={points} />
       <FlatList
         style={[styles.list, { width: width - 50 }]}
         data={busLines}
         horizontal={true}
         renderItem={({ item }) => (
-          // <View style={{
-          //   backgroundColor: item.color,
-          //   height: 50,
-          //   alignItems: "center",
-          //   justifyContent: "center",
-          // }}>
-          //   <Text style={{ height: 50 }} key={item.id}>{item.name}</Text>
-          // </View>
-          <BusList name={item.name} color={item.color} />
+          <BusList key={item.id} item={item} showButtons={showButtonsPlace} />
         )}
       />
 
-      {/* <FlatList
-        style={{ height: 50, position: "absolute", width: "100%" }}
-        data={[
-          { key: "a", color: "red" },
-          { key: "b", color: "green" },
-        ]}
-        renderItem={({ item, index }) => (
-          <View
-            style={{
-              backgroundColor: item.color,
-              height: 50,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={{ height: 50 }}>{item.key}</Text>
-          </View>
-        )}
-      /> */}
+      {showButtons ? (
+        <View style={styles.buttons}>
+          <ButtonPlace origin={busSelected.departurePoint.name} destination={busSelected.arrivalPoint.name} showPoints={drawPoints}  />
+        </View>
+      ) : (
+        <></>
+      )}
     </View>
   );
 };
@@ -70,15 +58,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 60,
     right: 50,
-    // width: 'auto',
-    height: '70',
-    // alignItems: "center",
-    // justifyContent: "center",
+    height: 70,
     fontSize: 24,
     borderRadius: 30,
-    // shadowRadius: 10,
-    // shadowColor: "#002746",
-    // shadowOpacity: 0.5,
-    // shadowOffset: { width: 0, height: 10 },
+  },
+  buttons: {
+    position: "absolute",
+    top: 150,
   },
 });

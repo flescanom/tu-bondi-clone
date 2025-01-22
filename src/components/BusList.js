@@ -1,15 +1,22 @@
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import React from "react";
+import React, { useState } from "react";
 
-const BusList = ( {name, color} ) => {
+const BusList = ( {item, showButtons} ) => {
+
+  const [isLineSelected, setIsLineSelected] = useState(item.isSelected);
+
+  const handleSelect = () => {
+    setIsLineSelected(!isLineSelected);    
+    console.log(item);
+    showButtons(!isLineSelected, item);
+  }
+
   return (
     <View>
-      <TouchableOpacity>
-        <View 
-          style={[styles.button]}>
-          {/* <AntDesign name="plus" size={24} color="white" /> */}
-          <Text style={{ fontSize: 30, color: color, fontWeight: 'bold'}}> { name } </Text>
+      <TouchableOpacity onPress={handleSelect}>
+        <View
+          style={ [styles.button, isLineSelected ? styles.buttonSelected : ''] }>
+          <Text style={[ styles.text, { color: item.color } ]}> { item.name } </Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -17,15 +24,7 @@ const BusList = ( {name, color} ) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-  },
   button: {
-    // position: "absolute",
-    // top: 60,
-    // right: 36,
     width: 60,
     height: 60,
     marginHorizontal: 5,
@@ -37,6 +36,14 @@ const styles = StyleSheet.create({
     shadowColor: "#002746",
     shadowOpacity: 0.5,
     shadowOffset: { width: 0, height: 2 },
+  },
+  buttonSelected: {
+    borderWidth: 3,
+    borderColor: "#0063b4",
+  },
+  text: {
+    fontSize: 26,
+    fontWeight: 'bold'
   }
 });
 

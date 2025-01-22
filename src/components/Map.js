@@ -3,8 +3,15 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
-const Map = () => {
+const userLocation = require("../../assets/icons/user-location.png");
+const finishFlag = require("../../assets/icons/finish-flag.png");
+const initialFlag = require("../../assets/icons/initial-flag.png");
+const bus = require("../../assets/icons/bus.png");
+const busStop = require("../../assets/icons/bus-stop.png");
+
+const Map = ({ points }) => {
   const [origin, setOrigin] = useState(null);
+  const [pointToDraw, setPointToDraw] = useState([]);
 
   useEffect(() => {
     getLocationPermission();
@@ -24,12 +31,16 @@ const Map = () => {
     });
   };
 
-  if(!origin) {
+  if (!origin) {
     return (
-        <View>
-            <Text>Cargando ubicacion...</Text>
-        </View>
-    )
+      <View>
+        <Text>Cargando ubicacion...</Text>
+      </View>
+    );
+  }
+
+  const onMarkerSelected = (marker) => {
+    console.log({marker});
   }
 
   return (
@@ -43,12 +54,22 @@ const Map = () => {
           longitudeDelta: 0.04,
         }}
       >
-      <Marker
-        coordinate={origin}
-        title="Mi ubicación"
-        description="Estoy aquí"
-      />
-      
+        <Marker
+          coordinate={origin}
+          image={userLocation}
+          title="Mi ubicación"
+          description="Estoy aquí"
+
+        />
+
+        {pointToDraw.map((marker, index) => (
+          <Marker 
+          key={marker.id}
+          image={busStop}
+          coordinate={marker} 
+          onPress={() => onMarkerSelected(marker)} 
+        />
+        ))}
       </MapView>
     </>
   );
